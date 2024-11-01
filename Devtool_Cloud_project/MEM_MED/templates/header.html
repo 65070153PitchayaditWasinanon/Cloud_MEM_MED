@@ -80,6 +80,26 @@
                             </div>
                             {% elif group.name|lower == 'doctor' %}
                             <div>
+                                <a href="{% url 'doc_calendar' %}" id="linkatag">
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <center>
+                                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M32 4V12M16 4V12M6 20H42M10 8H38C40.2091 8 42 9.79086 42 12V40C42 42.2091 40.2091 44 38 44H10C7.79086 44 6 42.2091 6 40V12C6 9.79086 7.79086 8 10 8Z" stroke="#1E1E1E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                            </center>
+                                        </div>
+                                        <div class="col-10">
+                                            <center>
+                                                <h5 class="text-align-center" id="offcanvasitemtitle">ปฏิทินประจำวัน
+                                                </h5>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <br>
+                            <div>
                                 <a href="{% url 'add-medicine' %}" id="linkatag">
                                     <div class="row">
                                         <div class="col-2">
