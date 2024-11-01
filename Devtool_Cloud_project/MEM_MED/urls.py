@@ -17,6 +17,9 @@ urlpatterns = [
     path('update-medicine-status/<int:medicine_id>/', views.update_medicine_status.as_view(), name='update_status'),
     path('appointment/<int:year>/<int:month>/<int:day>/', views.appointment.as_view(), name='appointment'),
 
+    path('appointment/<int:id>', views.add_appointment.as_view(), name='addappointment'),
+
+
     path('side-effect/', views.side.as_view(), name='side-effect'),
     path('notification/', views.notification.as_view(), name='notification'),
     path('report/<int:year>/<int:month>/<int:day>/', views.report.as_view(), name='report'),
