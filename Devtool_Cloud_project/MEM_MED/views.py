@@ -22,9 +22,22 @@ from django.views.generic import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 class report(View):
-    def get(self, request):
+    def get(self, request, year, month, day):
         user = Patient.objects.get(user__id = request.user.id)
-        return render(request, 'report.html', {"user":user})
+        report_date = date(year,month,day)
+        form = Report()
+        return render(request, 'report.html', {"user":user, "form":form, 'date':report_date})
+    
+    def post(self, request, year, month, day):
+        form = Report(request.POST)
+        if(form.is_valid()):
+            user = Patient.objects.get(user__id = request.user.id)
+            report_date = date(year,month,day)
+            SideEffect.objects.create(patient = user, date = report_date, detail= form.cleaned_data['detail'])
+        return redirect('calendar')
+    
+
+
 
 class side(View):
     def get(self, request):
@@ -237,7 +250,7 @@ class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
         context = {"patient":patient, "medicine_totake":medicine_sche, "th_month":th_month, 'day':day, "year":year, "all_status":all_status,
                     "morning_status":morning_status, "noon_status":noon_status, "eve_status":eve_status, "night_status":night_status,
                     "medicine_morning":medicine_morning, "medicine_noon":medicine_noon, "medicine_eve":medicine_eve, "medicine_night":medicine_night, 'present_day':present_day,
-                    "form":form, 'present_status':present_status}
+                    "form":form, 'present_status':present_status, "date_to_take":date_to_take}
         return render(request, 'dailymedicinedetail.html', context)
 
 

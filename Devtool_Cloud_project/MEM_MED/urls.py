@@ -19,5 +19,5 @@ urlpatterns = [
 
     path('side-effect/', views.side.as_view(), name='side-effect'),
     path('notification/', views.notification.as_view(), name='notification'),
-    path('report/', views.report.as_view(), name='report'),
+    path('report/<int:year>/<int:month>/<int:day>/', views.report.as_view(), name='report'),
 ]

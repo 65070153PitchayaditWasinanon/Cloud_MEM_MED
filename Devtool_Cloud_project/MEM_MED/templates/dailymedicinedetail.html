@@ -98,7 +98,7 @@
         <div class="row">
             <p class="col" style="font-size: 18px;">{{patient.name}}</p>
         </div>
-        <a type="" class="btn btn-danger" href="{% url 'report' %}"> รายงานผลข้างเคียง </a>    
+        <a type="" class="btn btn-danger" href="{% url 'report' date_to_take.year date_to_take.month date_to_take.day %}"> รายงานผลข้างเคียง </a>    
     </div>
 
     <!-- Accordion -->

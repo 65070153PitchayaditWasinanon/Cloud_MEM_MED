@@ -99,3 +99,9 @@ class DoctorAppointment(models.Model):
 
     def __str__(self):
         return f"Appointment for {self.patient.name} with {self.doctor_name} on {self.appointment_date}"
+    
+
+class SideEffect(models.Model):
+     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+     date = models.DateField(blank=True, null=True)
+     detail = models.TextField()

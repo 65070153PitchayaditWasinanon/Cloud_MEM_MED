@@ -91,14 +91,14 @@
 
 
     <h1>รายงานผลข้างเคียง</h1>
-    <form action="" method="post" ></form>
-
-    <div class="mb-3">
-        <textarea class="form-control" id="exampleFormControlTextarea1"
-            rows="10">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque officiis est optio. Cum cumque blanditiis modi voluptate! Soluta nobis unde, dolores consectetur itaque ut perferendis quibusdam illum? Neque, sequi illo.</textarea>
-    </div>
-
-
-    <button class="confirm-button">ยืนยัน</button>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{form.detail}}
+        </div>
+        <button class="confirm-button" type="submit">ยืนยัน</button>
+    </form>
+    
+    
 </div>
 {% endblock %}

@@ -91,3 +91,9 @@ class MedicationScheduleForm(forms.ModelForm):
         self.fields['is_eaten'].widget = forms.HiddenInput()
 
 
+class Report(forms.ModelForm):
+    detail = forms.CharField(widget=forms.Textarea(attrs={"rows":10, "class":"form-control"}))
+    class Meta:
+        model = SideEffect
+        fields = ['date', 'detail']
+
