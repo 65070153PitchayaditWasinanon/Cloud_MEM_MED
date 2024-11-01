@@ -4,6 +4,7 @@ from MEM_MED import views
 urlpatterns = [
     path("", views.calendar.as_view(), name="calendar"),
     path("calendar/<int:year>/<int:month>/", views.calendar.as_view(), name="calendar"),
+    path("doc_calendar/", views.doc_calendar.as_view(), name="doc_calendar"),
     path("doc_calendar/<int:year>/<int:month>/", views.doc_calendar.as_view(), name="doc_calendar"),
     path('medicine/<int:year>/<int:month>/<int:day>/', views.daily_medicine_detail.as_view(), name='medicine_sche'),  # You'll need to create this view
     path("patient/", views.PatientListView.as_view(), name="patient-list"),

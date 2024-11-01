@@ -56,9 +56,9 @@ class Login(View):
             year, month = current_date.year, current_date.month
 
             if user.groups.filter(name="Patient").exists():
-                return redirect('calendar', year=year, month=month)
+                return redirect('calendar')
             elif user.groups.filter(name="Doctor").exists():
-                return redirect('doc_calendar', year=year, month=month)
+                return redirect('doc_calendar')
 
         return render(request,'login.html', {"form":form})
 
