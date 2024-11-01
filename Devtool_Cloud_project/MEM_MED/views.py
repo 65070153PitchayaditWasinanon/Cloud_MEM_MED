@@ -421,3 +421,16 @@ class DailyMedicineEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
             print(form.errors)
             form = AddDailyMedicineForm(instance=medication_schedule_target)
             return render(request, 'edit-daily-medicine.html', {"form" : form})
+
+
+# เพิ่มเติม
+
+class NotificationView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = []
+
+    def get(self, request, pk):
+        medication_schedule_target = MedicationSchedule.objects.get(pk=pk)
+        form = AddDailyMedicineForm(instance=medication_schedule_target)
+        return render(request, 'edit-daily-medicine.html', {"form" : form})
+
