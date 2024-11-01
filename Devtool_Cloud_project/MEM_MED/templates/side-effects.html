@@ -143,7 +143,6 @@
         <div class="side-effects-section">
             <h2>อาการผลข้างเคียง</h2>
             {% for side in side %}
-            <p>{{forloop.counter}}. side</p>
             <div class="date-section">
                 <div class="date-header">
                     <span>{{forloop.counter}}.</span>
@@ -151,10 +150,10 @@
                 </div>
                 {% for medicine in side.patient.medicationschedule_set.all %}
 
-                {% if medicine.date_to_take != side.date %}
+                {% if medicine.date_to_take == side.date %}
                 <div class="medicine-card">
                     <div class="medicine-image">
-                        <!-- <img src="{{ medicine.medication.image.url }}"> -->
+                        <img src="{{ medicine.medication.image.url }}" width="100%" height="100%">
                     </div>
                     <div class="medicine-info">
                         <div class="medicine-name">ชื่อยา: {{ medicine.medication.name }}</div>
