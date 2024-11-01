@@ -136,71 +136,45 @@
             <h1>ประวัติอาการผลข้างเคียง</h1>
             <div class="profile-info">
                 <div class="avatar"></div>
-                <div>{{request.user.first_name}} {{request.user.last_name}}</div>
+                <div>{{user.user.first_name}} {{user.user.last_name}}</div>
             </div>
         </div>
         
         <div class="side-effects-section">
             <h2>อาการผลข้างเคียง</h2>
+            {% for side in side %}
+            <p>{{forloop.counter}}. side</p>
             <div class="date-section">
                 <div class="date-header">
-                    <span>1.</span>
-                    <span>วันที่เเจ้ง: 31/02/2029</span>
+                    <span>{{forloop.counter}}.</span>
+                    <span>วันที่เเจ้ง: {{side.date}}</span>
                 </div>
-                
-                <div class="medicine-card">
-                    <div class="medicine-image"></div>
-                    <div class="medicine-info">
-                        <div class="medicine-name">ชื่อยา: cartoon ahh medicine</div>
-                        <div class="medicine-details">ปริมาณ: 1 เม็ด</div>
-                        <div class="medicine-details">หลังกินเสร็จ: นอน คลื่นไส้อาเจียน</div>
-                    </div>
-                </div>
+                {% for medicine in side.patient.medicationschedule_set.all %}
 
+                {% if medicine.date_to_take != side.date %}
                 <div class="medicine-card">
-                    <div class="medicine-image"></div>
+                    <div class="medicine-image">
+                        <!-- <img src="{{ medicine.medication.image.url }}"> -->
+                    </div>
                     <div class="medicine-info">
-                        <div class="medicine-name">ชื่อยา: cartoon ahh medicine</div>
-                        <div class="medicine-details">ปริมาณ: 1 เม็ด</div>
-                        <div class="medicine-details">หลังกินเสร็จ: นอน คลื่นไส้อาเจียน</div>
+                        <div class="medicine-name">ชื่อยา: {{ medicine.medication.name }}</div>
+                        <div class="medicine-details">ปริมาณ: {{ medicine.quantity }}</div>
+                        <div class="medicine-details">คำแนะนำ: {{ medicine.instructions }}</div>
+                        <div class="medicine-details">ผลข้างเคียง: {{ medicine.medication.side_effects }}</div>
                     </div>
                 </div>
+                {% endif %}
+                {% endfor %}
+            
+
 
                 <div class="medicine-details" style="color: black;">
                     อาการที่แจ้งมา:<br>
-                    ปวดหัวตัวร้อนใกล้ตาย
+                    {{side.detail}}
                 </div>
             </div>
+            {% endfor %}
 
-            <!-- <div class="date-section">
-                <div class="date-header">
-                    <span>2.</span>
-                    <span>วันที่เริ่ม: 12/12/2028</span>
-                </div>
-                
-                <div class="medicine-card">
-                    <div class="medicine-image"></div>
-                    <div class="medicine-info">
-                        <div class="medicine-name">ชื่อยา: cartoon ahh medicine</div>
-                        <div class="medicine-details">ปริมาณ: 1 เม็ด</div>
-                        <div class="medicine-details">หลังกินเสร็จ: นอน คลื่นไส้อาเจียน</div>
-                    </div>
-                </div>
-
-                <div class="medicine-card">
-                    <div class="medicine-image"></div>
-                    <div class="medicine-info">
-                        <div class="medicine-name">ชื่อยา: cartoon ahh medicine</div>
-                        <div class="medicine-details">ปริมาณ: 1 เม็ด</div>
-                        <div class="medicine-details">หลังกินเสร็จ: นอน คลื่นไส้อาเจียน</div>
-                    </div>
-                </div>
-
-                <div class="reference-number">
-                    อาการที่แจ้งมา:<br>
-                    UUOIRFZASKJDFAKSDFMSAHDKASJ DKLASIDNLASDISKADJASDHKDJASK ODJASKDJ
-                </div>
-            </div> -->
 
         </div>
 

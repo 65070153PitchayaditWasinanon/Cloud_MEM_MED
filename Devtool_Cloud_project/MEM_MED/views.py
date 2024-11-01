@@ -40,9 +40,12 @@ class report(View):
 
 
 class side(View):
-    def get(self, request):
-        user = Patient.objects.get(user__id = request.user.id)
-        return render(request, 'side-effects.html', {"user":user})
+    def get(self, request, pk):
+        user = Patient.objects.get(pk = pk)
+        side = SideEffect.objects.filter(patient = user)
+        
+
+        return render(request, 'side-effects.html', {"user":user, "side":side})
     
 class notification(View):
     def get(self, request):
