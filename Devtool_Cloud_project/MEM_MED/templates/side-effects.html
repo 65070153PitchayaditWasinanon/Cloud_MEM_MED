@@ -1,0 +1,182 @@
+{% extends 'layout.html' %}
+{% block name %}รายงานผลข้างเคียง{% endblock %}
+
+    {% block mycss %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+
+
+        header {
+            background-color: #e6f7ff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .home-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .notification {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notification-count {
+            background: #000;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .profile {
+            padding: 20px;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #f0f0f0;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .side-effects-section {
+            padding: 20px;
+        }
+
+        .date-section {
+            background: #f8f8f8;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .date-header {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .date-number {
+            font-weight: bold;
+        }
+
+        .medicine-card {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .medicine-image {
+            width: 60px;
+            height: 60px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .medicine-info {
+            flex: 1;
+        }
+
+        .medicine-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .medicine-details {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .reference-number {
+            font-size: 12px;
+            color: #888;
+            word-break: break-all;
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+        <div class="profile">
+            <h1>ประวัติอาการผลข้างเคียง</h1>
+            <div class="profile-info">
+                <div class="avatar"></div>
+                <div>{{user.user.first_name}} {{user.user.last_name}}</div>
+            </div>
+        </div>
+        
+        <div class="side-effects-section">
+            <h2>อาการผลข้างเคียง</h2>
+            {% for side in side %}
+            <p>{{forloop.counter}}. side</p>
+            <div class="date-section">
+                <div class="date-header">
+                    <span>{{forloop.counter}}.</span>
+                    <span>วันที่เเจ้ง: {{side.date}}</span>
+                </div>
+                {% for medicine in side.patient.medicationschedule_set.all %}
+
+                {% if medicine.date_to_take != side.date %}
+                <div class="medicine-card">
+                    <div class="medicine-image">
+                        <!-- <img src="{{ medicine.medication.image.url }}"> -->
+                    </div>
+                    <div class="medicine-info">
+                        <div class="medicine-name">ชื่อยา: {{ medicine.medication.name }}</div>
+                        <div class="medicine-details">ปริมาณ: {{ medicine.quantity }}</div>
+                        <div class="medicine-details">คำแนะนำ: {{ medicine.instructions }}</div>
+                        <div class="medicine-details">ผลข้างเคียง: {{ medicine.medication.side_effects }}</div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            
+
+
+                <div class="medicine-details" style="color: black;">
+                    อาการที่แจ้งมา:<br>
+                    {{side.detail}}
+                </div>
+            </div>
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+{% endblock %}

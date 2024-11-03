@@ -1,0 +1,136 @@
+{% extends 'layout.html' %}
+{% block name %}การเเจ้งเตือน{% endblock %}
+
+{% block mycss %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #C4F0FA;
+    }
+
+    .home-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 5px;
+    }
+
+    .notification-count {
+        background-color: #C4F0FA;
+        border-radius: 10px;
+        padding: 2px 6px;
+        font-size: 12px;
+    }
+
+
+    .bell-icon {
+        width: 24px;
+        height: 24px;
+        fill: red;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    h1 {
+        margin-top: 0;
+    }
+
+    .tabs {
+        display: flex;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 20px;
+    }
+
+    .tab {
+        padding: 10px;
+        flex: 1;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .tab.active {
+        border-bottom: 2px solid #000;
+    }
+
+    .unread_notification {
+        background-color: #C4F0FA;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .notification {
+        background-color: #C4F0FA;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #ccc;
+        margin-right: 10px;
+    }
+
+    .notification-text {
+        flex: 1;
+    }
+
+    .notification-name {
+        font-weight: bold;
+    }
+
+    .notification-date {
+        font-size: 12px;
+        color: #666;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <main>
+        <h1>การแจ้งเตือน</h1>
+        <div class="tabs">
+            <div class="tab active"></div>
+        </div>
+        <div class="notifications">
+            {% for noti in notis %}
+            <div class="notification">
+                <div class="avatar"></div>
+                <div class="notification-text">
+                    <div class="notification-name">{{noti.doctor_name}}</div>
+                    <div class="notification-date">ได้ทำการนัดหมาย วันที่ {{noti.appointment_date}} เวลา {{noti.appointment_time}}</div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- <div class="notification">
+                    <div class="avatar"></div>
+                    <div class="notification-text">
+                        <div class="notification-name">หมอ walter white</div>
+                        <div class="notification-date">ถึงการนัดหมายวันที่ 31/2/2029</div>
+                    </div>
+                </div> -->
+
+        </div>
+    </main>
+</div>
+{% endblock %}

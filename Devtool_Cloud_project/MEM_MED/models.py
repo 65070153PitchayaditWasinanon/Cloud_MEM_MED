@@ -3,6 +3,13 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import User
 
+# ของ ผู้ป่วย
+# 1.หมอนัดหมายผู้ป่วย
+# 2.ถึงเวลานัด
+
+# ของ หมอ
+# 1.ถึงเวลานัด
+
 class Patient(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -12,10 +19,9 @@ class Patient(models.Model):
     medical_history = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class Doctor(models.Model):
-
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     birthdate = models.DateField()
@@ -83,11 +89,16 @@ class MedicationLog(models.Model):
         return f"{self.patient.name} - {self.medication.name} on {self.date_taken}"
 
 class DoctorAppointment(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    doctor_name = models.CharField(max_length=255)
+    patient = models.ForeignKey(Patient, on_delete=models.PROTECT)
+    doctor = models.ForeignKey(Doctor, on_delete=models.PROTECT, null=True)
     appointment_date = models.DateField()
     appointment_time = models.TimeField()
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"Appointment for {self.patient.name} with {self.doctor_name} on {self.appointment_date}"
+        return f"Appointment for {self.patient.name} with {self.doctor} on {self.appointment_date}"
+
+class SideEffect(models.Model):
+     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+     date = models.DateField(blank=True, null=True)
+     detail = models.TextField()

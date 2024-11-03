@@ -21,6 +21,39 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
+class report(View):
+    def get(self, request, year, month, day):
+        user = Patient.objects.get(user__id = request.user.id)
+        report_date = date(year,month,day)
+        form = Report()
+        return render(request, 'report.html', {"user":user, "form":form, 'date':report_date})
+    
+    def post(self, request, year, month, day):
+        form = Report(request.POST)
+        if(form.is_valid()):
+            user = Patient.objects.get(user__id = request.user.id)
+            report_date = date(year,month,day)
+            SideEffect.objects.create(patient = user, date = report_date, detail= form.cleaned_data['detail'])
+        return redirect('calendar')
+    
+
+
+
+class side(View):
+    def get(self, request, pk):
+        user = Patient.objects.get(pk = pk)
+        side = SideEffect.objects.filter(patient = user)
+        
+
+        return render(request, 'side-effects.html', {"user":user, "side":side})
+    
+class notification(View):
+    def get(self, request):
+        user = Patient.objects.get(user__id = request.user.id)
+        noti = DoctorAppointment.objects.filter(patient = user)
+        return render(request, 'notification.html', {"user":user, "notis":noti})
+
+
 class RedirectView(View):
     def get(self, request):
         return redirect("login")
@@ -29,16 +62,19 @@ class Login(View):
     def get(self, request):
         form = AuthenticationForm()
         return render(request, 'login.html', {"form": form})
-    
+    @csrf_exempt
     def post(self, request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request,user)
+            login(request, user)
+            current_date = datetime.now()
+            year, month = current_date.year, current_date.month
+
             if user.groups.filter(name="Patient").exists():
                 return redirect('calendar')
             elif user.groups.filter(name="Doctor").exists():
-                return redirect("patient-list")
+                return redirect('doc_calendar')
 
         return render(request,'login.html', {"form":form})
 
@@ -217,7 +253,7 @@ class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
         context = {"patient":patient, "medicine_totake":medicine_sche, "th_month":th_month, 'day':day, "year":year, "all_status":all_status,
                     "morning_status":morning_status, "noon_status":noon_status, "eve_status":eve_status, "night_status":night_status,
                     "medicine_morning":medicine_morning, "medicine_noon":medicine_noon, "medicine_eve":medicine_eve, "medicine_night":medicine_night, 'present_day':present_day,
-                    "form":form, 'present_status':present_status}
+                    "form":form, 'present_status':present_status, "date_to_take":date_to_take}
         return render(request, 'dailymedicinedetail.html', context)
 
 
@@ -277,6 +313,69 @@ class calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
             'log_dates_not_missed': log_dates_not_missed,
             'patient': patient,
             'patient_age': patient_age
+        })
+    
+
+class doc_calendar(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_medicationlog"]
+    
+    def get(self, request, year=None, month=None):
+        # log = MedicationSchedule.objects.filter(patient = patient)
+        appoint_q = DoctorAppointment.objects.all()
+
+        present_day = datetime.now().date()
+
+        if year is None or month is None:
+            now = datetime.now()
+            year = now.year
+            month = now.month
+        else:
+            year = int(year)
+            month = int(month)
+
+        cal = cale.Calendar(firstweekday=6)
+        month_days = cal.monthdayscalendar(year, month)
+
+        # log_dates = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == None and log.date_to_take > present_day}
+        # log_dates_missed = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and (log.is_eaten == False or log.is_eaten == None) and log.date_to_take <= present_day}
+        # log_dates_not_missed = {log.date_to_take.day for log in log if log.date_to_take.year == year and log.date_to_take.month == month and log.is_eaten == True and log.date_to_take <= present_day}
+
+        if appoint_q.exists():
+            appointment = {log.appointment_date.day for log in appoint_q if log.appointment_date.year == year and log.appointment_date.month == month and log.appointment_date >= present_day}
+            print(appointment)
+        else:
+            appointment = {}
+
+        if month == 1:
+            prev_month = 12
+            prev_year = year - 1
+        else:
+            prev_month = month - 1
+            prev_year = year
+
+        if month == 12:
+            next_month = 1
+            next_year = year + 1
+        else:
+            next_month = month + 1
+            next_year = year
+
+
+
+        return render(request, 'doc_calendar.html', {
+            'month_days': month_days,
+            'year': year,
+            'month': month,
+            'month_name': cale.month_name[month],
+            'prev_year': prev_year,
+            'prev_month': prev_month,
+            'next_year': next_year,
+            'next_month': next_month,
+            'log_dates': appointment, 
+            # 'log_dates_missed': log_dates_missed,
+            # 'log_dates_not_missed': log_dates_not_missed,
+            # 'patient': patient,
         })
 
 def day_view(request, year, month, day):
@@ -361,6 +460,8 @@ class PatientView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
         medicationschedule = MedicationSchedule.objects.filter(patient = patient_target)
         
+
+
         # เพิ่มอายุใน context
         context = {
             "patient_target": patient_target,
@@ -369,6 +470,9 @@ class PatientView(LoginRequiredMixin, PermissionRequiredMixin, View):
         }
 
         return render(request, 'Patient.html', context)
+    
+
+    # def post(self, request, pk):
 
 class DailyMedicineAddView(LoginRequiredMixin, PermissionRequiredMixin, View):
     login_url = '/login/'
@@ -423,14 +527,34 @@ class DailyMedicineEditView(LoginRequiredMixin, PermissionRequiredMixin, View):
             return render(request, 'edit-daily-medicine.html', {"form" : form})
 
 
-# เพิ่มเติม
-
-class NotificationView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class appointment(LoginRequiredMixin, PermissionRequiredMixin, View):
     login_url = '/login/'
-    permission_required = []
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.view_medicationschedule", "MEM_MED.change_medicationschedule"]
 
-    def get(self, request, pk):
-        medication_schedule_target = MedicationSchedule.objects.get(pk=pk)
-        form = AddDailyMedicineForm(instance=medication_schedule_target)
-        return render(request, 'edit-daily-medicine.html', {"form" : form})
+    def get(self, request, year, month, day):
+        dada = str(year)+"-"+str(month)+"-"+str(day)
+        appointment = DoctorAppointment.objects.filter(appointment_date = dada).order_by('appointment_time')
+        return render(request, 'appointment.html', {'appoint':appointment, "date":dada})
 
+class add_appointment(LoginRequiredMixin, PermissionRequiredMixin, View):
+    login_url = '/login/'
+    permission_required = ["MEM_MED.view_patient", "MEM_MED.view_medicationschedule", "MEM_MED.change_medicationschedule"]
+
+    def get(self, request, id):
+        form = AppointmentForm()
+        return render(request, 'addappointment.html', {'form':form})
+    
+    
+    def post(self, request, id):
+        form = AppointmentForm(request.POST)
+        patient = Patient.objects.get(pk=id)
+        doctor = Doctor.objects.get(user=request.user)
+
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.patient = patient
+            obj.doctor = doctor
+            obj.save()
+            return redirect('patient-detail', id)
+        
+        return render(request, 'addappointment.html', {'form':form})
