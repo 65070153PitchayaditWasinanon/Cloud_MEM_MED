@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-PROJECT_MAIN_DIR_NAME="Devtool_Cloud_project"
+PROJECT_MAIN_DIR_NAME="Cloud_MEM_MED/Devtool_Cloud_project"
 
 # Validate variables
 if [ -z "$PROJECT_MAIN_DIR_NAME" ]; then

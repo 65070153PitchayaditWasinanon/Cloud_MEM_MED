@@ -5,8 +5,8 @@ After=network.target
 [Service]
 User=ubuntu
 Group=www-data
-WorkingDirectory=/home/ubuntu/Devtool_Cloud_project/
-ExecStart=/home/ubuntu/Devtool_Cloud_project/venv/bin/gunicorn \
+WorkingDirectory=/home/ubuntu/Cloud_MEM_MED/Devtool_Cloud_project/
+ExecStart=/home/ubuntu/Cloud_MEM_MED/Devtool_Cloud_project/venv/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
           --bind 0.0.0.0:8000 \
