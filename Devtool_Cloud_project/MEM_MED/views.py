@@ -199,7 +199,7 @@ class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
         #สถานะทานยาโดยรวม
         all_status = True
         for medicine in medicine_sche:
-            if medicine.is_eaten is False: 
+            if medicine.is_eaten == None or medicine.is_eaten == False: 
                 all_status = False
                 break
         if(not medicine_sche):
@@ -241,7 +241,7 @@ class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
         medicine_night = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take, time_to_take = 'ตอนกลางคืน')
         night_status = True
         for medicine in medicine_night:
-            if medicine.is_eaten is False: 
+            if medicine.is_eaten == None or medicine.is_eaten == False: 
                 night_status = False
                 break
         if(not medicine_night):
