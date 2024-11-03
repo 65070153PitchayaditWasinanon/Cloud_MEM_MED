@@ -50,7 +50,7 @@
             <div class="patient-card">
                 <div class="text-center">
                     <div class="text-left d-flex align-items-center" style="background-color: rgb(233, 233, 233); padding: 10px; border-radius: 10px;">
-                        <img src="https://via.placeholder.com/80" class="rounded-circle me-2" alt="Profile Picture">
+                        <img src="https://comicvine.gamespot.com/a/uploads/scale_medium/6/62058/1225416-1369424_picture_1.png" class="rounded-circle me-2" alt="Profile Picture" width="25%" height="25%">
                         <p style="font-size: 90%; text-align: center;"> 
                             <br> ชื่อ-นามสกุล: {{patient_target.name}} <br> 
                             <strong>วันเกิด: </strong>{{patient_target.birthdate}}
@@ -74,11 +74,11 @@
 {% for i in medicationschedule %}
 <div class="center-card">
     <div class="card" style="width: 18rem;">
-        <img src="https://via.placeholder.com/80" class="card-img-top" alt="...">
+        <img src="{{i.medication.image.url}}" class="card-img-top" alt="...">
         <div class="card-body">
             <p class="card-text">ผู้ป่วย: {{i.patient}}</p>
-            <p class="card-text">ชื่อยๅ: {{i.medication}}</p>
-            <p class="card-text">เวลๅที่ทๅน: {{i.time_to_take}}</p>
+            <p class="card-text">ชื่อยา: {{i.medication}}</p>
+            <p class="card-text">เวลาที่ทาน: {{i.time_to_take}}</p>
         </div>
     </div>
 </div>
