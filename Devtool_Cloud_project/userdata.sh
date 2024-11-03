@@ -1,23 +1,30 @@
 #!/bin/bash
 set -e
 
-# Replace {YOUR_GIT_REOPO_URL} with your actual Git repository URL
-GIT_REPO_URL="https://github.com/65070153PitchayaditWasinanon/Cloud_MEM_MED.git"
-#GIT_REPO_URL="https://<your_username>:<your_PAT>@github.com/codewithmuh/django-aws-ec2-autoscaling.git"
+# Update the package list and install prerequisite packages
+sudo apt-get update -y
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
 
-# Replace {YOUR_PROJECT_MAIN_DIR_NAME} with your actual project directory name
-PROJECT_MAIN_DIR_NAME="Devtool_Cloud_project"
+# Add Docker’s official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-# Clone repository
-git clone "$GIT_REPO_URL" "/home/ubuntu/$PROJECT_MAIN_DIR_NAME"
+# Set up the stable Docker repository
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-cd "/home/ubuntu/$PROJECT_MAIN_DIR_NAME"
+# Update the package list and install Docker
+sudo apt-get update -y
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-# Make all .sh files executable
-chmod +x scripts/*.sh
+# Start Docker and enable it to run on startup
+sudo systemctl start docker
+sudo systemctl enable docker
 
-# Execute scripts for OS dependencies, Python dependencies, Gunicorn, Nginx, and starting the application
-./scripts/instance_os_dependencies.sh
-./scripts/python_dependencies.sh
-./scripts/gunicorn.sh
-./scripts/start_app.sh
+# Pull the Docker image
+sudo docker pull sundance02/memmy:1.0
+
+# Run the Docker container
+sudo docker run -d -p 8000:8000 --name mem_med_app sundance02/memmy:1.0
