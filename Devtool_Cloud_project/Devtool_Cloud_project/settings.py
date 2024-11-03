@@ -81,14 +81,25 @@ WSGI_APPLICATION = 'Devtool_Cloud_project.wsgi.application'
 
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'HOST': 'localhost',
+#         'USER': 'postgres',
+#         'PASSWORD': '0930038864',
+#         'NAME': 'MEM_MED',
+#         'PORT' : '8000',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'localhost',
+        'HOST': 'postgres.cdx5edhvjzxz.us-east-1.rds.amazonaws.com',
         'USER': 'postgres',
-        'PASSWORD': '0930038864',
-        'NAME': 'MEM_MED',
-        'PORT' : '8000',
+        'PASSWORD': 'panda12345',
+        'NAME': 'postgres',
+        'PORT' : '5432',
     }
 }
 
