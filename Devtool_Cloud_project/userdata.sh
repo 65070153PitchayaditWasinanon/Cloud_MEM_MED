@@ -6,7 +6,7 @@ GIT_REPO_URL="https://github.com/65070153PitchayaditWasinanon/Cloud_MEM_MED.git"
 #GIT_REPO_URL="https://<your_username>:<your_PAT>@github.com/codewithmuh/django-aws-ec2-autoscaling.git"
 
 # Replace {YOUR_PROJECT_MAIN_DIR_NAME} with your actual project directory name
-PROJECT_MAIN_DIR_NAME="Devtool_Cloud_project"
+PROJECT_MAIN_DIR_NAME="Cloud_MEM_MED/Devtool_Cloud_project"
 
 # Clone repository
 git clone "$GIT_REPO_URL" "/home/ubuntu/$PROJECT_MAIN_DIR_NAME"

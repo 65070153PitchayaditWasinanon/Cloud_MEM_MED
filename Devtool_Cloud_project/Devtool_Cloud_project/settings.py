@@ -95,9 +95,9 @@ WSGI_APPLICATION = 'Devtool_Cloud_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'postgres.cdx5edhvjzxz.us-east-1.rds.amazonaws.com',
+        'HOST': 'postgres.czruqcszwdoh.us-east-1.rds.amazonaws.com',
         'USER': 'postgres',
-        'PASSWORD': 'panda12345',
+        'PASSWORD': '0982751996',
         'NAME': 'postgres',
         'PORT' : '5432',
     }
