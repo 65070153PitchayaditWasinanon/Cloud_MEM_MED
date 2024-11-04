@@ -16,7 +16,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-MEDIA_URL = "/media/"
+# MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 
 # Quick-start development settings - unsuitable for production
@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'MEM_MED'
+    'MEM_MED',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,21 @@ EMAIL_HOST_USER = 'mem.med.notification@gmail.com'
 EMAIL_HOST_PASSWORD = 'wqod lbkp cleo vued'
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# settings.py for s3 access
+AWS_STORAGE_BUCKET_NAME = 'medicine-picture'
+AWS_S3_SIGNATURE_NAME = 's3v4'
+AWS_S3_REGION_NAME = 'us-east-1'  # e.g., 'us-east-1'
+AWS_ACCESS_KEY_ID = None  # ไม่จำเป็นต้องตั้งค่า
+AWS_SECRET_ACCESS_KEY = None  # ไม่จำเป็นต้องตั้งค่า
+AWS_QUERYSTRING_AUTH = False
+
+
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+# ตั้งค่าการเก็บไฟล์ media (เช่น รูปภาพที่ผู้ใช้ upload) บน S3
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+
+

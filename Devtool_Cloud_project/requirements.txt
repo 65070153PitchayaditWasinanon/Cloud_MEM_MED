@@ -6,3 +6,5 @@ psycopg2==2.9.9
 sqlparse==0.5.1
 tzdata==2024.2
 psycopg2-binary==2.9.9 # add
+boto3==1.28.57
+django-storages==1.13.2
