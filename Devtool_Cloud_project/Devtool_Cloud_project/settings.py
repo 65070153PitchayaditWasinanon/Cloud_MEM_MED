@@ -150,3 +150,18 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# ทำหน้าที่เป็นแบ็กเอนด์ในการส่งอีเมล โดยโปรโตคอล SMTP (Simple Mail Transfer Protocol) จะถูกใช้ในการส่งอีเมล
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# กำหนด EMAIL_HOST ให้เป็น 'smtp.gmail.com' ซึ่งเป็นเซิร์ฟเวอร์ SMTP ของ Gmail หมายความว่า Django จะใช้ Gmail เป็นตัวกลางในการส่งอีเมลออกจากระบบ
+EMAIL_HOST = 'smtp.gmail.com'
+# กำหนดพอร์ตของเซิร์ฟเวอร์ SMTP ที่จะใช้ในการเชื่อมต่อกับ Gmail พอร์ต 587 เป็นพอร์ตที่ใช้สำหรับการเชื่อมต่อที่เข้ารหัส TLS (Transport Layer Security) ซึ่งเป็นมาตรฐานสำหรับการส่งข้อมูลที่ปลอดภัยผ่านเครือข่าย
+EMAIL_PORT = 587
+# กำหนดให้เปิดใช้งาน TLS ซึ่งเป็นการเข้ารหัสข้อมูลระหว่างการส่งข้อมูลผ่าน SMTP TLS จะช่วยปกป้องข้อมูลที่ส่งผ่านเครือข่ายจากการถูกดักฟังหรือแก้ไข
+EMAIL_USE_TLS = True
+# กำหนดชื่อผู้ใช้ (อีเมล) สำหรับบัญชี Gmail ที่จะใช้ส่งอีเมล (สร้างเอง)
+EMAIL_HOST_USER = 'mem.med.notification@gmail.com'
+# รหัสผ่านสำหรับบัญชี Gmail นี้ เพื่อยืนยันตัวตนและอนุญาตให้เซิร์ฟเวอร์ SMTP ของ Gmail ยอมรับการส่งอีเมลจากแอปพลิเคชัน
+EMAIL_HOST_PASSWORD = 'wqod lbkp cleo vued'
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

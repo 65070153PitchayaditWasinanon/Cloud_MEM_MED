@@ -21,6 +21,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
+from django.conf import settings
+from django.core.mail import send_mail
+
 class report(View):
     def get(self, request, year, month, day):
         user = Patient.objects.get(user__id = request.user.id)
@@ -32,8 +35,24 @@ class report(View):
         form = Report(request.POST)
         if(form.is_valid()):
             user = Patient.objects.get(user__id = request.user.id)
+            doctor = Doctor.objects.all()
             report_date = date(year,month,day)
             SideEffect.objects.create(patient = user, date = report_date, detail= form.cleaned_data['detail'])
+
+            subject = 'รายงานผลข้างเคียงยาจาก '+str(user.user.first_name)+" "+str(user.user.last_name)+" ณ วันที่ "+str(report_date)
+            message = 'โดยมีรายละเอียดดังนี้\n'+str(form.cleaned_data['detail'])
+            recipient_list = []
+            for doc in doctor:
+                recipient_list.append(str(doc.user.email))
+
+            # Send the email
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                recipient_list,
+                fail_silently=False,
+            )
         return redirect('calendar')
     
 
@@ -192,7 +211,7 @@ class daily_medicine_detail(LoginRequiredMixin, PermissionRequiredMixin, View):
         user = User.objects.get(pk=request.user.id)
         patient = Patient.objects.get(user = user) #fix ไว้
         medicine_sche = MedicationSchedule.objects.filter(patient = patient, date_to_take = date_to_take)
-        th_month = int_to_thai_month(month) 
+        th_month = int_to_thai_month(month)
 
         form = MedicationScheduleForm()
 
@@ -491,6 +510,24 @@ class DailyMedicineAddView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
         if form.is_valid():
             form.save()
+
+            patient = form.cleaned_data["patient"]
+            doctor = Doctor.objects.get(user__id = request.user.id)
+
+            subject = 'คุณหมอ '+str(doctor.user.first_name)+" "+str(doctor.user.last_name)+" ได้ทำการจ่ายยาให้ "+str(patient.user.first_name)+" "+str(patient.user.last_name)+" โปรดทำการตรวจสอบในแอปพลิเคชั่น"
+            message = 'คุณหมอ '+str(doctor.user.first_name)+" "+str(doctor.user.last_name)+' ได้ทำการจ่ายยาประจำวัน โปรดตรวจสอบวัน - เวลา ก่อนทานยา'
+            recipient_list = []
+            recipient_list.append(str(patient.user.email))
+
+            # Send the email
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                recipient_list,
+                fail_silently=False,
+            )
+
             return redirect("add-daily-medicine")
         else:
             return render(request, 'add-daily-medicine.html', {"medication_schedule_target" : medication_schedule_target, "form" : form})
@@ -555,6 +592,21 @@ class add_appointment(LoginRequiredMixin, PermissionRequiredMixin, View):
             obj.patient = patient
             obj.doctor = doctor
             obj.save()
+
+            subject = 'Appointment จาก '+str(doctor.user.first_name)+" "+str(doctor.user.last_name)+" ถึง "+str(patient.user.first_name)+" "+str(patient.user.last_name)
+            message = 'คุณมีนัดจากคุณหมอในวันที่ '+str(obj.appointment_date)+" เวลา "+str(obj.appointment_time)
+            recipient_list = []
+            recipient_list.append(str(patient.user.email))
+
+            # Send the email
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                recipient_list,
+                fail_silently=False,
+            )
+
             return redirect('patient-detail', id)
         
         return render(request, 'addappointment.html', {'form':form})
